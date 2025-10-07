@@ -21,15 +21,15 @@ jobs:
       - name: Install JavaScript dependencies
         run: npm install
 
-      - name: Install CocoaPods (with boost checksum fix)
+      - name: Set up Ruby and Bundler
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '2.7.5' # A common, stable version for RN projects
+          bundler-cache: true # Installs gems from the Gemfile
+
+      - name: Install CocoaPods Dependencies
         working-directory: ./ios
-        run: |
-          pod install || ( \
-            echo "Initial pod install failed. Applying boost checksum fix..." && \
-            sed -i '' 's/f0397ba6e982c4450f27bf32a2a83292aba035b827a5623a14636ea583318c41/9c2f4b99bc7ddb95a8babff8ba78a4108aa0951243ea919166a7e2e279825502/g' Podfile.lock && \
-            echo "Checksum fixed. Retrying pod install..." && \
-            pod install \
-          )
+        run: bundle exec pod install --repo-update
 
       - name: Upload to TestFlight
         uses: apple-actions/upload-testflight-build@v2
