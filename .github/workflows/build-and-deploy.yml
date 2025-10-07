@@ -24,7 +24,7 @@ jobs:
       - name: Install CocoaPods
         run: |
           cd ios
-          arch -x86_64 pod install
+          pod install
 
       - name: Upload to TestFlight
         uses: apple-actions/upload-testflight-build@v2
