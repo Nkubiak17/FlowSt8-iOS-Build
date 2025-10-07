@@ -1,0 +1,41 @@
+name: Build and Deploy to TestFlight
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-deploy:
+    runs-on: macos-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      - name: Install JavaScript dependencies
+        run: npm install
+
+      - name: Install CocoaPods
+        run: |
+          cd ios
+          arch -x86_64 pod install
+
+      - name: Upload to TestFlight
+        uses: apple-actions/upload-testflight-build@v2
+        with:
+          app-bundle-id: 'com.flowst8.app'
+          app-sku: 'flowst8-001'
+          team-id: 'G8Y76YDK6W'
+          
+          api-key-id: ${{ secrets.APP_STORE_CONNECT_API_KEY_ID }}
+          api-issuer-id: ${{ secrets.APP_STORE_CONNECT_ISSUER_ID }}
+          api-private-key: ${{ secrets.APP_STORE_CONNECT_PRIVATE_KEY }}
+          
+          workspace-path: './ios/FlowSt8.xcworkspace'
+          scheme: 'FlowSt8'
