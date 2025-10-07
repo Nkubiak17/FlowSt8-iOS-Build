@@ -24,8 +24,8 @@ jobs:
       - name: Set up Ruby and Bundler
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: '2.7.5' # A common, stable version for RN projects
-          bundler-cache: true # Installs gems from the Gemfile
+          ruby-version: '3.2' # <-- This is the fix
+          bundler-cache: true
 
       - name: Install CocoaPods Dependencies
         working-directory: ./ios
